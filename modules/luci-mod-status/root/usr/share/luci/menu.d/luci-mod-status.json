@@ -7,7 +7,7 @@
 			"path": "admin_status/index"
 		},
 		"depends": {
-			"acl": [ "luci-mod-status-index" ]
+			"acl": [ "luci-base" ]
 		}
 	},
 
