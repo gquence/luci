@@ -1,0 +1,21 @@
+{
+	"luci-app-opkg": {
+		"description": "Grant access to opkg management",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/etc/opkg.conf": [ "read" ],
+				"/etc/opkg/*.conf": [ "read" ]
+			},
+			"ubus": {
+				"luci": [ "getMountPoints" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/opkg.conf": [ "write" ],
+				"/etc/opkg/*.conf": [ "write" ]
+			}
+		}
+	}
+}

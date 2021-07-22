@@ -4,7 +4,6 @@
 module("luci.controller.opkg", package.seeall)
 
 function index()
-	entry({"admin", "system", "opkg"}, template("opkg"), _("Software"), 30)
 	entry({"admin", "system", "opkg", "list"}, call("action_list")).leaf = true
 	entry({"admin", "system", "opkg", "exec"}, post("action_exec")).leaf = true
 	entry({"admin", "system", "opkg", "statvfs"}, call("action_statvfs")).leaf = true

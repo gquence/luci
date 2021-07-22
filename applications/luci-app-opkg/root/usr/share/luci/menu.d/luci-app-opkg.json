@@ -1,0 +1,13 @@
+{
+	"admin/system/opkg": {
+		"title": "Software",
+		"order": 30,
+		"action": {
+			"type": "template",
+			"path": "opkg"
+		},
+		"depends": {
+			"acl": [ "luci-app-opkg" ]
+		}
+	}
+}
