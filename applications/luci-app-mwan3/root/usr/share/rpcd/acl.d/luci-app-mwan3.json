@@ -1,6 +1,7 @@
 {
 	"luci-app-mwan3": {
 		"description": "Grant UCI access for luci-app-mwan3",
+		"cgi-io": [ "exec" ],
 		"read": {
 			"file": {
 				"/etc/mwan3.user": [ "read" ],

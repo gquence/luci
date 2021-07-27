@@ -2,7 +2,7 @@
 	"luci-app-opkg": {
 		"description": "Grant access to opkg management",
 		"read": {
-			"cgi-io": [ "exec" ],
+			"cgi-io": [ "upload" ],
 			"file": {
 				"/etc/opkg.conf": [ "read" ],
 				"/etc/opkg/*.conf": [ "read" ]
