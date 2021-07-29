@@ -588,16 +588,28 @@ local function check_authentication(method)
 	return session_retrieve(sid)
 end
 
-local function get_children(node)
+local function get_children(node, acl)
 	local children = {}
 
 	if not node.wildcard and type(node.children) == "table" then
 		for name, child in pairs(node.children) do
-			children[#children+1] = {
-				name  = name,
-				node  = child,
-				order = child.order or 1000
-			}
+			if acl and child.depends and type(child.depends) == "table" then
+				local perm
+				perm = check_acl_depends(child.depends.acl, acl)
+				if perm == true or perm == false then
+					children[#children+1] = {
+						name  = name,
+						node  = child,
+						order = child.order or 1000
+					}
+				end
+			else
+				children[#children+1] = {
+					name  = name,
+					node  = child,
+					order = child.order or 1000
+				}	
+			end
 		end
 
 		table.sort(children, function(a, b)
@@ -612,8 +624,8 @@ local function get_children(node)
 	return children
 end
 
-local function find_subnode(root, prefix, recurse, descended)
-	local children = get_children(root)
+local function find_subnode(root, prefix, recurse, acl, descended)
+	local children = get_children(root, acl)
 
 	if #children > 0 and (not descended or recurse) then
 		local sub_path = { unpack(prefix) }
@@ -625,7 +637,7 @@ local function find_subnode(root, prefix, recurse, descended)
 		for _, child in ipairs(children) do
 			sub_path[#prefix+1] = child.name
 
-			local res_path = find_subnode(child.node, sub_path, recurse, true)
+			local res_path = find_subnode(child.node, sub_path, recurse, acl, true)
 
 			if res_path then
 				return res_path
@@ -800,6 +812,10 @@ function dispatch(request)
 	local requested_path_args = {}
 
 	local required_path_acls = {}
+
+	if #request == 0 then
+		request = { "admin" }
+	end
 
 	for i, s in ipairs(request) do
 		if type(page.children) ~= "table" or not page.children[s] then
@@ -979,7 +995,7 @@ function dispatch(request)
 		end
 
 	elseif action.type == "firstchild" then
-		local sub_request = find_subnode(page, requested_path_full, action.recurse)
+		local sub_request = find_subnode(page, requested_path_full, action.recurse, ctx.authacl and ctx.authacl["access-group"])
 		if sub_request then
 			dispatch(sub_request)
 		else

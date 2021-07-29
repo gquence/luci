@@ -13,16 +13,11 @@
 		"read": {
 			"file": {
 				"/": [ "list" ],
-				"/*": [ "list" ],
-				"/proc/sys/net/netfilter/nf_conntrack_count": [ "read" ],
-				"/proc/sys/net/netfilter/nf_conntrack_max": [ "read" ],
-				"/usr/lib/lua/luci/version.lua": [ "read" ],
-				"/www/luci-static/resources/view/status/include": [ "list" ]
+				"/*": [ "list" ]
 			},
 			"ubus": {
-				"file": [ "list" , "read" ],
-				"uci": [ "changes", "get" ],
-				"system": [ "board", "info" ]
+				"file": [ "list" ],
+				"uci": [ "changes", "get" ]
 			}
 		},
 		"write": {
